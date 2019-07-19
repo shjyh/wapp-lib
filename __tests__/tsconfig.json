@@ -1,0 +1,10 @@
+{
+    "extends": "../tsconfig.base",
+    "compilerOptions": {
+        "types": ["node", "jest"]
+    },
+    "include": [
+        "./**/*.ts",
+        "../typings/**.d.ts"
+    ]
+}
