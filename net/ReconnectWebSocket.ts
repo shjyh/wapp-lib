@@ -1,5 +1,6 @@
 import EventEmitter from '../EventEmitter';
 import WebSocket from './WebSocket';
+import net from './net';
 
 const eventCollection = ['open','close','error','message'];
 
@@ -48,7 +49,7 @@ export default class ReconnectWebSocket extends EventEmitter<EventType>{
     }
     private reconnect(now: boolean = false): boolean{
         if(
-            window.navigator.onLine&&!this.closed&&
+            net.onLine&&!this.closed&&
             ([2,3].includes(this.ws.readyState))
         ){
             clearTimeout(this.reconnect_t);
@@ -95,14 +96,14 @@ export default class ReconnectWebSocket extends EventEmitter<EventType>{
             this.ws.addEventListener(e, this);
         }
 
-        window.addEventListener('online', this);
-        window.addEventListener('offline', this);
+        net.addEventListener('online', this);
+        net.addEventListener('offline', this);
     }
 
     /**
      * @returns 是否处理地本次发送
      */
-    send(d: string|Blob|ArrayBuffer|Object): boolean{
+    send(d: string|ArrayBuffer|Object): boolean{
         if(this.closed){
             console.error('ReconnectWebSocket:websocket closed');
             return false;
@@ -132,8 +133,8 @@ export default class ReconnectWebSocket extends EventEmitter<EventType>{
         if(!this.closed){
             this.closed = true;
 
-            window.removeEventListener('online', this);
-            window.removeEventListener('offline', this);
+            net.removeEventListener('online', this);
+            net.removeEventListener('offline', this);
             for(let e of eventCollection){
                 this.ws.removeEventListener(e, this);
             }
@@ -152,22 +153,16 @@ export default class ReconnectWebSocket extends EventEmitter<EventType>{
     get protocol(){
         return this.ws.protocol;
     }
-    get binaryType(){
-        return this.ws. binaryType;
-    }
-    get bufferedAmount(){
-        return this.ws.bufferedAmount;
-    }
 
     isOnline(){
-        return window.navigator.onLine;
+        return net.onLine;
     }
 
     /**
      * @description 内部处理事件函数，外部不可调用
      * @private
      */
-    handleEvent(event: Event){
+    handleEvent(event: {type: string}){
         switch(event.type){
             case 'open':
                 if(this.reopen) this.trigger('reconnected', event);
@@ -188,7 +183,7 @@ export default class ReconnectWebSocket extends EventEmitter<EventType>{
                 break;
             case 'message':
                 this.trigger('message', { data: JSON.parse(
-                    (<MessageEvent>event).data
+                    (event as {type: 'message', data: string}).data
                 )});
                 break;
             case 'online':

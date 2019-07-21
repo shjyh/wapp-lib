@@ -14,7 +14,6 @@ wx.checkSession = function(opt){
     opt.complete&&opt.complete({errMsg: 'complete'});
 }
 
-
 test('wxp success回调挂载', ()=>{
     return expect(wxp.checkSession({mock: 'success'} as any)).resolves.toEqual({
         errMsg: 'success'

@@ -5,5 +5,6 @@ module.exports = {
     ],
     testMatch: [
         "**/__tests__/**/*.test.ts"
-    ]
+    ],
+    transformIgnorePatterns: ["<rootDir>/node_modules/(?!(lodash-es))"]
 }
