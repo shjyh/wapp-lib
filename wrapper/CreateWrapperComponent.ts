@@ -127,7 +127,7 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
             this.setData(getMapedObject(this['$react'], watchs));
             opt.attached&&opt.attached.call(this['$react'], ...args)
         };
-        $opt.detached = $opt.lifetime.detached = function(this: WxComponent, ...args){
+        $opt.detached = $opt.lifetimes.detached = function(this: WxComponent, ...args){
             if(opt.detached) opt.detached.call(this['$react'], ...args);
             this['$react'].$unwatch();
             this['__patchable'] = false;

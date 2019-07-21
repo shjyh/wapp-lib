@@ -1,4 +1,4 @@
-import CreateWrapperPage, { WrapperPage } from '../wrapper/CreateWrapperPage';
+import CreateWrapperPage from '../wrapper/CreateWrapperPage';
 import { wrapper } from '../make';
 
 test('page 生命周期&setData调用', done=>{
