@@ -12,6 +12,7 @@ export type WatchItem = string | {
 export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = false): Object{
     const d = {};
     for(let prop of props){
+        if(prop==='') continue;
         if(typeof prop === 'string'){
             const value = get(obj, prop);
             if(pathAsKey) d[prop] = value
@@ -19,6 +20,10 @@ export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = fals
             continue;
         }
 
+        if(prop.path===''){
+            //表示当前是一个数组，忽略其它属性
+            return getMapedArray(obj as any[], prop.watches, prop.key, pathAsKey);
+        }
         const value = getMapedArray(get(obj, prop.path), prop.watches, prop.key, pathAsKey);
         if(!value) continue;
         
@@ -49,13 +54,19 @@ function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { 
     const d = {};
     
     for(let prop of props){
+        if(prop==='') continue;
         if(typeof prop === 'string'){
             if(newObj[prop] !== oldObj[prop]) d[withPrefix(prop, prefix)] = newObj[prop];
             continue;
         }
 
+
         const { path, watches, key } = prop;
-        Object.assign(d, getArrDiff(newObj[path], oldObj[path], watches, key, withPrefix(path, prefix)));
+        if(path===''){
+            //表示当前是一个数组，忽略其它属性
+            return getArrDiff(newObj as any[], oldObj as any[], watches, key, prefix);
+        }
+        Object.assign(d, getArrDiff(get(newObj, path), get(oldObj, path), watches, key, withPrefix(path, prefix)));
     }
 
     return d;

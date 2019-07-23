@@ -14,7 +14,10 @@ test('reactive bindwatch 逻辑', done=>{
                 arr: [
                     { a: 1, b: 2, list: [ { innerA: 5, innerB: 6 } ] }, { a: 3, b: 4 }
                 ]
-            }
+            },
+            nestedArr: [
+                [ { innerValue: '1' } ]
+            ]
         },
         methods: {
             change(){
@@ -23,6 +26,7 @@ test('reactive bindwatch 逻辑', done=>{
                 this.arr[0].a = 6;
                 this.warr.arr[0].list.push({ innerA: 7 } as any)
                 this.warr.arr[1]['$random'] = Math.random().toString();
+                this.nestedArr[0][0].innerValue = '2';
             }
         }
     })) as any;
@@ -30,7 +34,8 @@ test('reactive bindwatch 逻辑', done=>{
     const watches: WatchItem[] = [
         'a.b', {path: 'a.arr', watches: [], key: '*this'},
         {path: 'arr', watches: ['a'] },
-        {path: 'warr.arr', watches: ['$random', { path: 'list', watches: ['innerA'] } ], key: '$random'}
+        {path: 'warr.arr', watches: ['$random', { path: 'list', watches: ['innerA'] } ], key: '$random'},
+        {path: 'nestedArr', watches: [ { path: '', watches: [ 'innerValue' ] } ]}
     ]
 
     expect(getMapedObject(reactive, watches)).toEqual({
@@ -51,12 +56,15 @@ test('reactive bindwatch 逻辑', done=>{
             {
                 $random: expect.stringMatching(/^0\./),
             }]
-        }
+        },
+        nestedArr: [
+            [ { innerValue: '1' } ]
+        ]
     });
     expect({ v: reactive.warr.arr[0].$random}).toEqual({
         v: expect.stringMatching(/^0\./)
     });
-
+    
     bindWatch(reactive, watches, (d)=>{
         expect(d).toEqual({
             'a.b': 4,
@@ -65,7 +73,8 @@ test('reactive bindwatch 逻辑', done=>{
             'warr.arr[0].list':  [{ innerA: 5 }, { innerA: 7}],
             'warr.arr[1]': {
                 $random: expect.stringMatching(/^0\./)
-            }
+            },
+            'nestedArr[0][0].innerValue': '2'
         })
         
         done();
