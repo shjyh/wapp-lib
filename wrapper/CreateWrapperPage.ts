@@ -90,7 +90,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
                 }
             }
             if(!this['__waitOnLoadDone']&&opt.onShow){
-                opt.onShow.call(this['$react'], ...arg);
+                opt.onShow.call(this['$react'], ...args);
                 return;
             }
             this['__waitOnLoadDone'].then(()=>{

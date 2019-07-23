@@ -35,7 +35,7 @@ test('reactive bindwatch 逻辑', done=>{
         'a.b', {path: 'a.arr', watches: [], key: '*this'},
         {path: 'arr', watches: ['a'] },
         {path: 'warr.arr', watches: ['$random', { path: 'list', watches: ['innerA'] } ], key: '$random'},
-        {path: 'nestedArr', watches: [ { path: '', watches: [ 'innerValue' ] } ]}
+        {path: 'nestedArr', watches: { path: '', watches: [ 'innerValue' ] } }
     ]
 
     expect(getMapedObject(reactive, watches)).toEqual({

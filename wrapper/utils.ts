@@ -5,9 +5,17 @@ import { ComponentOptions } from '../make';
 import merge from 'lodash-es/merge';
 import { arrayRemove } from '../utils';
 
-export type WatchItem = string | {
-    path: string, watches: WatchItem[], key?: string
+export interface ArrayWatchItem {
+    path: string;
+    watches: WatchItem[]|NestedArrayWatchItem;
+    key?: string
+};
+
+export interface NestedArrayWatchItem extends ArrayWatchItem {
+    path: ''
 }
+
+export type WatchItem = string | ArrayWatchItem
 
 export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = false): Object{
     const d = {};
@@ -20,10 +28,6 @@ export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = fals
             continue;
         }
 
-        if(prop.path===''){
-            //表示当前是一个数组，忽略其它属性
-            return getMapedArray(obj as any[], prop.watches, prop.key, pathAsKey);
-        }
         const value = getMapedArray(get(obj, prop.path), prop.watches, prop.key, pathAsKey);
         if(!value) continue;
         
@@ -33,15 +37,18 @@ export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = fals
     return d;
 }
 
-function getMapedArray(arr: any[], props: WatchItem[], key: string, pathAsKey = false): any[]|null{
+function getMapedArray(arr: any[], props: WatchItem[]|NestedArrayWatchItem, key: string, pathAsKey = false): any[]|null{
     if(!arr) return null;
     if(key==='*this') return [...arr];
 
     const needRandom = (key === '$random');
 
     return arr.map(item => {
-        if(needRandom&&!item.$random) item.$random = Math.random().toString();
-        return getMapedObject(item, props, pathAsKey);
+        if(Array.isArray(props)){
+            if(needRandom&&!item.$random) item.$random = Math.random().toString();
+            return getMapedObject(item, props, pathAsKey);
+        }
+        return getMapedArray(item, props.watches, props.key, pathAsKey);
     })
 }
 
@@ -62,24 +69,24 @@ function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { 
 
 
         const { path, watches, key } = prop;
-        if(path===''){
-            //表示当前是一个数组，忽略其它属性
-            return getArrDiff(newObj as any[], oldObj as any[], watches, key, prefix);
-        }
         Object.assign(d, getArrDiff(get(newObj, path), get(oldObj, path), watches, key, withPrefix(path, prefix)));
     }
 
     return d;
 }
 
-function getArrDiff(newArr: any[], oldArr: any[], props: WatchItem[], key: string, prefix: string = ''): { [key: string]: any } {
+function getArrDiff(newArr: any[], oldArr: any[], props: WatchItem[]|NestedArrayWatchItem, key: string, prefix: string = ''): { [key: string]: any } {
     if(newArr.length!==oldArr.length || key==='*this') return {[prefix]: newArr};
     
     const d = {};
 
     newArr.forEach((item, index)=>{
-        if(key&&item[key]!==oldArr[index][key]) d[`${prefix}[${index}]`] = item;
-        else Object.assign(d, getObjDiff(item, oldArr[index], props, `${prefix}[${index}]`));
+        if(Array.isArray(props)){
+            if(key&&item[key]!==oldArr[index][key]) d[`${prefix}[${index}]`] = item;
+            else Object.assign(d, getObjDiff(item, oldArr[index], props, `${prefix}[${index}]`));
+        }else{
+            Object.assign(d, getArrDiff(item, oldArr[index], props.watches, props.key, `${prefix}[${index}]`));
+        }
     });
 
     return d;
