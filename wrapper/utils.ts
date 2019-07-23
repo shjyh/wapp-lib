@@ -53,8 +53,9 @@ function getMapedArray(arr: any[], props: WatchItem[]|NestedArrayWatchItem, key:
 }
 
 function withPrefix(path: string, prefix: string){
-    if(prefix) return [prefix, '.', path].join('');
-    return path;
+    if(!prefix) return path;
+    if(path.startsWith('[')) return prefix + path;
+    return [prefix, '.', path].join('');
 }
 
 function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { [key: string]: any } {
