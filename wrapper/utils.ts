@@ -18,6 +18,7 @@ export interface NestedArrayWatchItem extends ArrayWatchItem {
 export type WatchItem = string | ArrayWatchItem
 
 export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = false): Object{
+    if(!obj) return null;
     const d = {};
     for(let prop of props){
         if(prop==='') continue;
@@ -39,6 +40,7 @@ export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = fals
 
 function getMapedArray(arr: any[], props: WatchItem[]|NestedArrayWatchItem, key: string, pathAsKey = false): any[]|null{
     if(!arr) return null;
+    if(!Array.isArray(arr)) return null;
     if(key==='*this') return [...arr];
 
     const needRandom = (key === '$random');
@@ -59,6 +61,8 @@ function withPrefix(path: string, prefix: string){
 }
 
 function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { [key: string]: any } {
+    if(!newObj||!oldObj) return {[prefix]: newObj};
+    
     const d = {};
     
     for(let prop of props){
@@ -77,6 +81,7 @@ function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { 
 }
 
 function getArrDiff(newArr: any[], oldArr: any[], props: WatchItem[]|NestedArrayWatchItem, key: string, prefix: string = ''): { [key: string]: any } {
+    if(!newArr||!oldArr) return {[prefix]: null};
     if(newArr.length!==oldArr.length || key==='*this') return {[prefix]: newArr};
     
     const d = {};
