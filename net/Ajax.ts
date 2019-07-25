@@ -244,6 +244,6 @@ export default function Ajax(API: string){
     }
 
     return {
-        post, postSilence, use, config
+        post, postSilence, use, config, addHook
     }
 }
