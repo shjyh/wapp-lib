@@ -3,8 +3,8 @@ import {Loading, Toast} from '../ui';
 import { HttpErrorHandlers, fireErrorHandler, mergeErrorHandlers } from './ErrorHandler'
 
 interface AajxHookEventMap{
-    before: (url: string, data: Object, headers: Object) => boolean
-    success: (url: string, req: Object) => void
+    before: (url: string, data: any, headers: Object) => boolean
+    success: (url: string, req: any) => void
     error: (url: string, err: Object) => void
     complete: (url: string) => void
 }
@@ -126,7 +126,7 @@ export default function Ajax(API: string){
 
     const lockSet: {[key: string]: boolean} = {};
 
-    function post<T extends { code: number } = { code: number }>(url: string, data: Object = {}, opt: AjaxOptions = {}): Promise<T>{
+    function post<T extends { code: number } = { code: number }>(url: string, data: any = {}, opt: AjaxOptions = {}): Promise<T>{
         const errorHandler = mergeErrorHandlers(globalOptions.errorHandler, opt.errorHandler);
         opt = Object.assign({}, globalOptions, opt);
         if(!opt.lockToken) opt.lockToken = url;
