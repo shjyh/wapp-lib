@@ -11,7 +11,7 @@ interface ApiMeta<Opt, Result = wx.GeneralCallbackResult, Err = wx.GeneralCallba
 export interface ApiTypeMap{
     checkSession: ApiMeta<wx.CheckSessionOption>;
     login: ApiMeta<wx.LoginOption, wx.LoginSuccessCallbackResult>;
-    getUserInfo: ApiMeta<wx.GetUserInfoOption>;
+    getUserInfo: ApiMeta<wx.GetUserInfoOption, wx.GetUserInfoSuccessCallbackResult>;
     redirectTo: ApiMeta<wx.RedirectToOption>;
     switchTab: ApiMeta<wx.SwitchTabOption>;
     reLaunch: ApiMeta<wx.ReLaunchOption>;
