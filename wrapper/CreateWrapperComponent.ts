@@ -2,7 +2,10 @@ import Reactive from '../observer/Reactive';
 import { bindWatch, getMapedObject, WatchItem, mixins } from './utils';
 import { ComponentOptions } from '../make';
 
-export type WrapperComponent = (opt, watchs: WatchItem[], methods: string[])=>void
+export interface WrapperComponent {
+    (opt, watchs: WatchItem[], methods: string[]): void;
+    mixin(m): void
+}
 
 const wrapperList: {component: Function, wrapper: WrapperComponent}[] = []
 
