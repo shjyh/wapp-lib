@@ -121,10 +121,10 @@ export function mixins(...opts: any[]){
 
 import Reactive from './observer/Reactive';
 
-export default function make<T>(o: T): T{
-    return (new Reactive({
+export default function make<T>(o: T): { value: T } {
+    return new Reactive({
         data: {
-            d: o
+            value: o
         }
-    }) as any).d;
+    }) as any;
 }
