@@ -89,8 +89,8 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
                     this.setData(d);
                 }
             }
-            if(!this['__waitOnLoadDone']&&opt.onShow){
-                opt.onShow.call(this['$react'], ...args);
+            if(!this['__waitOnLoadDone']){
+                if(opt.onShow) opt.onShow.call(this['$react'], ...args);
                 return;
             }
             this['__waitOnLoadDone'].then(()=>{
