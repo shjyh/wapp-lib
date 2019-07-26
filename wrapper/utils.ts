@@ -23,7 +23,7 @@ export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = fals
     for(let prop of props){
         if(prop==='') continue;
         if(typeof prop === 'string'){
-            const value = get(obj, prop);
+            const value = get(obj, prop)||null;
             if(pathAsKey) d[prop] = value
             else set(d, prop, value);
             continue;
@@ -74,7 +74,7 @@ function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { 
 
 
         const { path, watches, key } = prop;
-        Object.assign(d, getArrDiff(get(newObj, path), get(oldObj, path), watches, key, withPrefix(path, prefix)));
+        Object.assign(d, getArrDiff(newObj[path], oldObj[path], watches, key, withPrefix(path, prefix)));
     }
 
     return d;
