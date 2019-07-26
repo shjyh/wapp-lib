@@ -32,6 +32,7 @@ interface WatchOptionsWithHandler<T> extends WatchOptions {
     handler: WatchHandler<T>;
 }
 type WatchHandler<T> = (val: T, oldVal: T) => void;
+
 export interface ComponentOptions<
     Data = DefaultData,
     Methods = DefaultMethods<Component>,
@@ -47,6 +48,9 @@ export interface ComponentOptions<
     options?: Object;
     relations?: Object;
 
+    onShareAppMessage?(
+        options?: Page.IShareAppMessageOption,
+    ): Page.ICustomShareContent;
     onInit?(): void;
     beforeLoad?(options: any): void;
     onLoad?(options: any): void
