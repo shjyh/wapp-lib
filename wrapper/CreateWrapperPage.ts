@@ -68,7 +68,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
              */
             reactive.$initWatch();
 
-            if(opt.beforeLoad) opt.beforeLoad.call(reactive);
+            if(opt.beforeLoad) opt.beforeLoad.call(reactive, ...args);
 
             bindWatch(reactive, watchs, d=>{
                 if(page['__patchable']){
