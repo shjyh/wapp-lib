@@ -93,8 +93,8 @@ export interface Component {
         callback: (this: this, n: T, o: T) => void,
         options?: WatchOptions
     ): (() => void);
-    $emit(event: string, detail: Object, options: TriggerEventOption): void;
-    triggerEvent(event: string, detail: Object, options: TriggerEventOption): void;
+    $emit(event: string, detail?: Object, options?: TriggerEventOption): void;
+    triggerEvent(event: string, detail?: Object, options?: TriggerEventOption): void;
 }
 
 type DataDef<Data, Props> = Data | ((this: Readonly<Props> & Component) => Data)
