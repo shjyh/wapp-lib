@@ -163,7 +163,7 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
         Component($opt);
     }
 
-    WrapperComponent.mixins = function(m: ComponentOptions){
+    WrapperComponent.mixin = function(m: ComponentOptions){
         if(globalMixins.includes(m)) return;
         globalMixins.push(m);
     }

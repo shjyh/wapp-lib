@@ -116,7 +116,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
         Page($opt);
     }
 
-    WrapperPage.mixins = function(m: ComponentOptions){
+    WrapperPage.mixin = function(m: ComponentOptions){
         if(globalMixins.includes(m)) return;
         globalMixins.push(m);
     }

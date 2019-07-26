@@ -48,8 +48,8 @@ export interface ComponentOptions<
     relations?: Object;
 
     onInit?(): void;
-    beforeLoad?(): void;
-    onLoad?(): void
+    beforeLoad?(options: any): void;
+    onLoad?(options: any): void
     onReady?(): void;
     onShow?(): void;
     onHide?(): void;
