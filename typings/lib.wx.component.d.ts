@@ -59,6 +59,7 @@ declare interface TriggerEventOption {
 }
 
 declare interface WxComponent extends BaseComponent {
+  $react: any;
   /** 组件的文件路径 */
   is: string;
   /** 节点id */
