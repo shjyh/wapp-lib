@@ -43,7 +43,7 @@ export function Curl(API: string){
 
             console.warn('token:', token, 'request:', url, 'methods:', method, 'data:', data);
             wx.request({
-                url, method, header: headers, dataType: 'json',
+                url, method, header: headers, dataType: 'json', data,
                 success(res){
                     console.warn('token:', token, 'request success:', url, res);
                     r(res);
