@@ -114,6 +114,10 @@ declare namespace Page {
     T extends IAnyObject = any
   > extends PageInstanceBaseProps<D> {
     $react: any;
+    /** 使用选择器选择组件实例节点，返回匹配到的第一个组件实例对象（会被 `wx://component-export` 影响） */
+    selectComponent(selector: string): WxComponent;
+    /** 使用选择器选择组件实例节点，返回匹配到的全部组件实例对象组成的数组 */
+    selectAllComponents(selector: string): WxComponent[];
     /** 生命周期回调—监听页面加载
      *
      * 页面加载时触发。一个页面只会调用一次，可以在 onLoad 的参数中获取打开当前页面路径中的参数。

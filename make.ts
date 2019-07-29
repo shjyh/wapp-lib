@@ -45,7 +45,9 @@ export interface ComponentOptions<
     watch?: Record<string, WatchOptionsWithHandler<any> | WatchHandler<any> | string>;
 
     externalClasses?: string|string[];
-    options?: Object;
+    options?: {
+        multipleSlots?: boolean
+    };
     relations?: Object;
 
     onShareAppMessage?(
