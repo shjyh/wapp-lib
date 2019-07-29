@@ -52,8 +52,9 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
 
     const globalMixins: ComponentOptions[] = [];
     function WrapperComponent(opt, watchs: WatchItem[], methods: string[], vImages?: {[key: string]: string}){
+        // props数据将由mixin方式合并入当前的reactive中
         const propsMixin = {
-            data: {}
+            data: {} as { $images?: typeof vImages }
         };
         const $opt = {
             methods: {},
@@ -66,13 +67,21 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
         if(vImages){
             $opt.data = {
                 $images: vImages
-            }
+            };
+            propsMixin.data.$images = Object.seal(vImages);
         }
 
         if(opt.props){
             if(!opt.data) opt.data = {};
             $opt.properties = {};
             for(let prop of Object.keys(opt.props)){
+                //去除watchItem中props相关的响应
+                watchs = watchs.filter(w=>{
+                    if(typeof w === 'string')
+                        return w!==prop&&!w.startsWith(prop+'.');
+                    else
+                        return w.path!==prop&&!w.path.startsWith(prop+'.');
+                });
                 $opt.properties[prop] = createProp(prop, opt.props[prop]);
                 propsMixin.data[prop] = $opt.properties[prop].value;
             }

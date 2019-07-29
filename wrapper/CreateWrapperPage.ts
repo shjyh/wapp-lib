@@ -16,20 +16,28 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
 
     const globalMixins: ComponentOptions[] = [];
     function WrapperPage(opt, watchs: WatchItem[], methods: string[], vImages?: {[key: string]: string}){
-         mixins(opt, globalMixins);
+        const $opt = {} as any;
+        if(vImages){
+            $opt.data = {
+                $images: vImages
+            };
+
+            if(!opt.mixins) opt.mixins = [];
+            opt.mixins.push({
+                data: {
+                    $images: Object.seal(vImages)
+                }
+            });
+        };
+        mixins(opt, globalMixins);
 
          
-         const $opt = {} as any;
-         if(vImages){
-             $opt.data = {
-                 $images: vImages
-             }
-         };
-         for(let m of methods){
-             $opt[m] = function(this: any, ...arg){
-                 return this.$react[m](...arg);
-             }
-         }
+         
+        for(let m of methods){
+            $opt[m] = function(this: any, ...arg){
+                return this.$react[m](...arg);
+            }
+        }
 
         for(let normalEvent of [
              'onReady', 'onPullDownRefresh', 'onReachBottom', 'onPageScroll', 'onShareAppMessage'

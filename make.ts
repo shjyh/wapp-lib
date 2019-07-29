@@ -81,7 +81,8 @@ export interface Component {
     $setData(d): void;
     $isActive(): boolean;
     $getPage(): Page.PageInstance;
-    $getComponent(): WxComponent
+    $getComponent(): WxComponent;
+    $images?: {[key: string]: string};
 
     $watch(
         expOrFn: string,
