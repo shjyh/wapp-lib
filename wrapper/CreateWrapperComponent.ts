@@ -51,7 +51,7 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
     }
 
     const globalMixins: ComponentOptions[] = [];
-    function WrapperComponent(opt, watchs: WatchItem[], methods: string[]){
+    function WrapperComponent(opt, watchs: WatchItem[], methods: string[], vImages?: {[key: string]: string}){
         const propsMixin = {
             data: {}
         };
@@ -63,6 +63,11 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
             lifetimes: {},
             pageLifetimes: {}
         } as any;
+        if(vImages){
+            $opt.data = {
+                $images: vImages
+            }
+        }
 
         if(opt.props){
             if(!opt.data) opt.data = {};
