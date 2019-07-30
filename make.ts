@@ -60,6 +60,7 @@ export interface ComponentOptions<
     onShow?(): void;
     onHide?(): void;
     onPullDownRefresh?(): void;
+    onReachBottom?(): void;
     onPageScroll?(): void;
     onUnload?(): void;
     onDestroy?(): void;
