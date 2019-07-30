@@ -82,7 +82,8 @@ function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { 
 }
 
 function getArrDiff(newArr: any[], oldArr: any[], props: WatchItem[]|NestedArrayWatchItem, key: string, prefix: string = ''): { [key: string]: any } {
-    if(!newArr||!oldArr) return {[prefix]: null};
+    if(!newArr) return {[prefix]: null};
+    if(!oldArr) return {[prefix]: newArr};
     if(newArr.length!==oldArr.length || key==='*this' || !props) return {[prefix]: newArr};
     
     const d = {};
