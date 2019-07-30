@@ -1,6 +1,7 @@
 import Reactive from '../observer/Reactive';
 import { bindWatch, getMapedObject, WatchItem, mixins } from './utils';
 import { ComponentOptions } from '../make';
+import './setter';
 
 export interface WrapperPage {
     (opt, watchs: WatchItem[], methods: string[]): void;
