@@ -4,10 +4,10 @@ defineSetter({
     before(val){
         if(
             val&&
-            ['input','blur','confirm'].includes(val.type)&&
             val.target&&
             val.currentTarget&&
-            'detail' in val
+            'detail' in val&&
+            ['input','blur','confirm'].includes(val.type)
         ){
             if((typeof val.detail==='object')&&'value' in val.detail){
                 return val.detail.value;
