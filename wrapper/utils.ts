@@ -3,6 +3,7 @@ import get from 'lodash-es/get';
 import set from 'lodash-es/set';
 import { ComponentOptions } from '../make';
 import merge from 'lodash-es/merge';
+import cloneDeep from 'lodash-es/cloneDeep';
 import { arrayRemove } from '../utils';
 
 export interface ArrayWatchItem {
@@ -23,7 +24,7 @@ export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = fals
     for(let prop of props){
         if(prop==='') continue;
         if(typeof prop === 'string'){
-            const value = get(obj, prop)||null;
+            const value = cloneDeep(get(obj, prop))||null;
             if(pathAsKey) d[prop] = value
             else set(d, prop, value);
             continue;
@@ -41,7 +42,7 @@ export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = fals
 function getMapedArray(arr: any[], props: WatchItem[]|NestedArrayWatchItem, key: string, pathAsKey = false): any[]|null{
     if(!arr) return null;
     if(!Array.isArray(arr)) return null;
-    if(key==='*this'||!props) return [...arr];
+    if(key==='*this'||!props) return cloneDeep(arr);
 
     const needRandom = (key === '$random');
 
