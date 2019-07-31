@@ -4,6 +4,7 @@ import set from 'lodash-es/set';
 import { ComponentOptions } from '../make';
 import merge from 'lodash-es/merge';
 import cloneDeep from 'lodash-es/cloneDeep';
+import isEqual from 'lodash-es/isEqual';
 import { arrayRemove } from '../utils';
 
 export interface ArrayWatchItem {
@@ -84,11 +85,16 @@ function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { 
 function getArrDiff(newArr: any[], oldArr: any[], props: WatchItem[]|NestedArrayWatchItem, key: string, prefix: string = ''): { [key: string]: any } {
     if(!newArr) return {[prefix]: null};
     if(!oldArr) return {[prefix]: newArr};
-    if(newArr.length!==oldArr.length || key==='*this' || !props) return {[prefix]: newArr};
+    if(newArr.length!==oldArr.length) return {[prefix]: newArr};
     
     const d = {};
 
     newArr.forEach((item, index)=>{
+        if(key==='*this' || !props){
+            if(isEqual(item, oldArr[index])) return;
+            else d[`${prefix}[${index}]`] = item;
+        }
+
         if(Array.isArray(props)){
             if(key&&item[key]!==oldArr[index][key]) d[`${prefix}[${index}]`] = item;
             else Object.assign(d, getObjDiff(item, oldArr[index], props, `${prefix}[${index}]`));
