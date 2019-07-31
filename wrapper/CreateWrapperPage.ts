@@ -2,6 +2,7 @@ import Reactive from '../observer/Reactive';
 import { bindWatch, getMapedObject, WatchItem, mixins } from './utils';
 import { ComponentOptions } from '../make';
 import './setter';
+import { arrayRemove } from '../utils';
 
 export interface WrapperPage {
     (opt, watchs: WatchItem[], methods: string[]): void;
@@ -17,22 +18,16 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
 
     const globalMixins: ComponentOptions[] = [];
     function WrapperPage(opt, watchs: WatchItem[], methods: string[], vImages?: {[key: string]: string}){
+        mixins(opt, globalMixins);
+
         const $opt = {} as any;
         if(vImages){
+            arrayRemove(watchs, '$images');
+            Object.seal(vImages);
             $opt.data = {
                 $images: vImages
             };
-
-            if(!opt.mixins) opt.mixins = [];
-            opt.mixins.push({
-                data: {
-                    $images: Object.seal(vImages)
-                }
-            });
         };
-        mixins(opt, globalMixins);
-
-         
          
         for(let m of methods){
             $opt[m] = function(this: any, ...arg){
@@ -55,6 +50,8 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
             page['__cachedPatches'] = [];
 
             const reactive = new Reactive(opt, false);
+            if(vImages) reactive['$images'] = vImages;
+            
             Object.defineProperties(reactive, {
                 $isActive: {
                     value(){

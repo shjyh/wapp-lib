@@ -25,8 +25,9 @@ export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = fals
     for(let prop of props){
         if(prop==='') continue;
         if(typeof prop === 'string'){
-            const value = cloneDeep(get(obj, prop))||null;
-            if(pathAsKey) d[prop] = value
+            let value = cloneDeep(get(obj, prop));
+            if(value===undefined) value = null;
+            if(pathAsKey) d[prop] = value;
             else set(d, prop, value);
             continue;
         }

@@ -2,6 +2,7 @@ import Reactive from '../observer/Reactive';
 import { bindWatch, getMapedObject, WatchItem, mixins } from './utils';
 import { ComponentOptions } from '../make';
 import './setter';
+import { arrayRemove } from '../utils';
 
 export interface WrapperComponent {
     (opt, watchs: WatchItem[], methods: string[]): void;
@@ -55,7 +56,7 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
     function WrapperComponent(opt, watchs: WatchItem[], methods: string[], vImages?: {[key: string]: string}){
         // props数据将由mixin方式合并入当前的reactive中
         const propsMixin = {
-            data: {} as { $images?: typeof vImages }
+            data: {}
         };
         const $opt = {
             methods: {},
@@ -65,11 +66,13 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
             lifetimes: {},
             pageLifetimes: {}
         } as any;
+
         if(vImages){
+            arrayRemove(watchs, '$images');
+            Object.seal(vImages);
             $opt.data = {
                 $images: vImages
             };
-            propsMixin.data.$images = Object.seal(vImages);
         }
 
         if(opt.props){
@@ -86,9 +89,9 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
                 $opt.properties[prop] = createProp(prop, opt.props[prop]);
                 propsMixin.data[prop] = $opt.properties[prop].value;
             }
+            if(!opt.mixins) opt.mixins = [];
+            opt.mixins.push(propsMixin);
         }
-        if(!opt.mixins) opt.mixins = [];
-        opt.mixins.push(propsMixin);
 
         mixins(opt, globalMixins);
         
@@ -104,6 +107,8 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
             component['__cachedPatches'] = [];
 
             const reactive = new Reactive(opt, false);
+            if(vImages) reactive['$images'] = vImages;
+
             Object.defineProperties(reactive, {
                 $setData: {
                     value(d){
