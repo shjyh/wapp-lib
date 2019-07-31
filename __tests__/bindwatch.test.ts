@@ -25,7 +25,7 @@ test('reactive bindwatch 逻辑', done=>{
                 this.a.arr.push(5);
                 this.arr[0].a = 6;
                 this.warr.arr[0].list.push({ innerA: 7 } as any)
-                this.warr.arr[1]['$random'] = Math.random().toString();
+                this.warr.arr[1]['$random'] = 100;
                 this.nestedArr[0][0].innerValue = '2';
             }
         }
@@ -50,11 +50,11 @@ test('reactive bindwatch 逻辑', done=>{
         }],
         warr: {
             arr: [{
-                $random: expect.stringMatching(/^0\./),
+                $random: expect.any(Number),
                 list: [{ innerA: 5 }] 
             },
             {
-                $random: expect.stringMatching(/^0\./),
+                $random: expect.any(Number)
             }]
         },
         nestedArr: [
@@ -62,7 +62,7 @@ test('reactive bindwatch 逻辑', done=>{
         ]
     });
     expect({ v: reactive.warr.arr[0].$random}).toEqual({
-        v: expect.stringMatching(/^0\./)
+        v: expect.any(Number)
     });
     
     bindWatch(reactive, watches, (d)=>{
@@ -72,7 +72,7 @@ test('reactive bindwatch 逻辑', done=>{
             'arr[0].a': 6,
             'warr.arr[0].list':  [{ innerA: 5 }, { innerA: 7}],
             'warr.arr[1]': {
-                $random: expect.stringMatching(/^0\./)
+                $random: expect.any(Number)
             },
             'nestedArr[0][0].innerValue': '2'
         })

@@ -21,6 +21,8 @@ const observerState = {
   shouldConvert: true
 }
 
+let $random = 1;
+
 /**
  * Observer class that are attached to each observed
  * object. Once attached, the observer converts target
@@ -65,7 +67,10 @@ export class Observer {
    */
   observeArray (items) {
     for (let i = 0, l = items.length; i < l; i++) {
-      observe(items[i])
+      observe(items[i]);
+      if(isPlainObject(items[i])){
+        items[i].$random = $random++;
+      }
     }
   }
 }

@@ -46,11 +46,8 @@ function getMapedArray(arr: any[], props: WatchItem[]|NestedArrayWatchItem, key:
     if(!Array.isArray(arr)) return null;
     if(key==='*this'||!props) return cloneDeep(arr);
 
-    const needRandom = (key === '$random');
-
     return arr.map(item => {
         if(Array.isArray(props)){
-            if(needRandom&&!item.$random) item.$random = Math.random().toString();
             return getMapedObject(item, props, pathAsKey);
         }
         return getMapedArray(item, props.watches, props.key, pathAsKey);
