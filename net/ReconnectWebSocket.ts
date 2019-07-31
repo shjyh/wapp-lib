@@ -1,6 +1,7 @@
 import EventEmitter from '../EventEmitter';
 import WebSocket from './WebSocket';
 import net from './net';
+import stringify from './stringify';
 
 const eventCollection = ['open','close','error','message'];
 
@@ -11,7 +12,7 @@ function transSendData(d: string|ArrayBuffer|Object): string|ArrayBuffer{
         typeof d!=='string' &&
         (typeof ArrayBuffer !== 'undefined' && !(d instanceof ArrayBuffer))
     ){
-        return JSON.stringify(d);
+        return stringify(d);
     }
     return <string|ArrayBuffer>d;
 }

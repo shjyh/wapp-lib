@@ -1,6 +1,7 @@
 import {Loading, Toast} from '../ui';
 
 import { HttpErrorHandlers, fireErrorHandler, mergeErrorHandlers } from './ErrorHandler'
+import stringify from './stringify';
 
 interface AajxHookEventMap{
     before: (url: string, data: any, headers: Object) => boolean
@@ -43,7 +44,7 @@ export function Curl(API: string){
 
             console.warn('token:', token, 'request:', url, 'methods:', method, 'data:', data);
             wx.request({
-                url, method, header: headers, dataType: 'json', data,
+                url, method, header: headers, dataType: 'json', data: stringify(data),
                 success(res){
                     console.warn('token:', token, 'request success:', url, res);
                     r(res);
