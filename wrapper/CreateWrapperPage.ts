@@ -2,7 +2,6 @@ import Reactive from '../observer/Reactive';
 import { bindWatch, getMapedObject, WatchItem, mixins } from './utils';
 import { ComponentOptions } from '../make';
 import './setter';
-import { arrayRemove } from '../utils';
 
 export interface WrapperPage {
     (opt, watchs: WatchItem[], methods: string[]): void;
@@ -22,7 +21,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
 
         const $opt = {} as any;
         if(vImages){
-            arrayRemove(watchs, '$images');
+            watchs = watchs.filter(w=>w!=='$images');
             Object.seal(vImages);
             $opt.data = {
                 $images: vImages
