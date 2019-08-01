@@ -129,28 +129,29 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
                 }
             });
             if(opt.onInit) opt.onInit.call(reactive);
-            component['$react'] = reactive;
+            component.$react = reactive;
             /**
              * 在onInit之后调用initWatch开始侦听
              */
-            reactive.$initWatch();
-
-            bindWatch(reactive, watchs, d=>{
-                if(component['__patchable']){
-                    component.setData(d);
-                    return;
-                }
-                component['__cachedPatches'].push(d);
-            });
             if(opt.created) opt.created.call(reactive, ...args);
         };
         $opt.attached = $opt.lifetimes.attached = function(this: WxComponent, ...args){
             //初次设置
-            this.setData(getMapedObject(this['$react'], watchs));
-            opt.attached&&opt.attached.call(this['$react'], ...args)
+            const reactive = this.$react as Reactive;
+            reactive.$initWatch();
+
+            bindWatch(reactive, watchs, d=>{
+                if(this['__patchable']){
+                    this.setData(d);
+                    return;
+                }
+                this['__cachedPatches'].push(d);
+            });
+            this.setData(getMapedObject(this.$react, watchs));
+            opt.attached&&opt.attached.call(this.$react, ...args)
         };
         $opt.detached = $opt.lifetimes.detached = function(this: WxComponent, ...args){
-            if(opt.detached) opt.detached.call(this['$react'], ...args);
+            if(opt.detached) opt.detached.call(this.$react, ...args);
             this['$react'].$unwatch();
             this['__patchable'] = false;
         };
@@ -162,11 +163,11 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
                         this.setData(d);
                     }
                 }
-                if(opt.onPageShow) opt.onPageShow.call(this['$react'], ...args);
+                if(opt.onPageShow) opt.onPageShow.call(this.$react, ...args);
             },
             hide(this: WxComponent, ...args){
                 this['__patchable'] = false;
-                if(opt.onPageHide) opt.onPageHide.call(this['$react'], ...args);
+                if(opt.onPageHide) opt.onPageHide.call(this.$react, ...args);
             }
         }
 

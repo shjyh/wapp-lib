@@ -49,7 +49,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
             page['__cachedPatches'] = [];
 
             const reactive = new Reactive(opt, false);
-            if(vImages) reactive['$images'] = vImages;
+            if(vImages) reactive['$images'] = vImages; 
             
             Object.defineProperties(reactive, {
                 $isActive: {
@@ -72,7 +72,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
             });
 
             if(opt.onInit) opt.onInit.call(reactive);
-            page['$react'] = reactive;
+            page.$react = reactive;
             /**
              * 在onInit之后调用initWatch开始侦听
              */
@@ -103,24 +103,24 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
                 }
             }
             if(!this['__waitOnLoadDone']){
-                if(opt.onShow) opt.onShow.call(this['$react'], ...args);
+                if(opt.onShow) opt.onShow.call(this.$react, ...args);
                 return;
             }
             this['__waitOnLoadDone'].then(()=>{
                 delete this['__waitOnLoadDone'];
-                if(opt.onShow) opt.onShow.call(this['$react'], ...args);
+                if(opt.onShow) opt.onShow.call(this.$react, ...args);
             })
         };
         $opt.onHide = function(...args){
             this['__patchable'] = false;
-            if(opt.onHide) opt.onHide.call(this['$react'], ...args);
+            if(opt.onHide) opt.onHide.call(this.$react, ...args);
         };
         $opt.onUnload = function(...args){
-            if(opt.onUnload) opt.onUnload.call(this['$react'], ...args);
-            this['$react'].$unwatch();
+            if(opt.onUnload) opt.onUnload.call(this.$react, ...args);
+            this.$react.$unwatch();
             this['__patchable'] = false;
 
-            if(opt.onDestroy) opt.onDestroy.call(this['$react']);
+            if(opt.onDestroy) opt.onDestroy.call(this.$react);
         }
 
         Page($opt);

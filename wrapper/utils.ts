@@ -19,7 +19,7 @@ export interface NestedArrayWatchItem extends ArrayWatchItem {
 
 export type WatchItem = string | ArrayWatchItem
 
-export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = false): Object{
+export function getMapedObject(obj: Object, props: WatchItem[]): Object{
     if(!obj) return null;
     const d = {};
     for(let prop of props){
@@ -27,30 +27,28 @@ export function getMapedObject(obj: Object, props: WatchItem[], pathAsKey = fals
         if(typeof prop === 'string'){
             let value = cloneDeep(get(obj, prop));
             if(value===undefined) value = null;
-            if(pathAsKey) d[prop] = value;
-            else set(d, prop, value);
+            set(d, prop, value);
             continue;
         }
 
-        const value = getMapedArray(get(obj, prop.path), prop.watches, prop.key, pathAsKey);
+        const value = getMapedArray(get(obj, prop.path), prop.watches, prop.key);
         if(!value) continue;
         
-        if(pathAsKey) d[prop.path] = value;
-        else set(d, prop.path, value);
+        set(d, prop.path, value);
     }
     return d;
 }
 
-function getMapedArray(arr: any[], props: WatchItem[]|NestedArrayWatchItem, key: string, pathAsKey = false): any[]|null{
+function getMapedArray(arr: any[], props: WatchItem[]|NestedArrayWatchItem, key: string): any[]|null{
     if(!arr) return null;
     if(!Array.isArray(arr)) return null;
     if(key==='*this'||!props) return cloneDeep(arr);
 
     return arr.map(item => {
         if(Array.isArray(props)){
-            return getMapedObject(item, props, pathAsKey);
+            return getMapedObject(item, props);
         }
-        return getMapedArray(item, props.watches, props.key, pathAsKey);
+        return getMapedArray(item, props.watches, props.key);
     })
 }
 
@@ -68,13 +66,15 @@ function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { 
     for(let prop of props){
         if(prop==='') continue;
         if(typeof prop === 'string'){
-            if(newObj[prop] !== oldObj[prop]) d[withPrefix(prop, prefix)] = newObj[prop];
+            const newProp = get(newObj, prop);
+            const oldProp = get(oldObj, prop);
+            if(!isEqual(newProp, oldProp)) d[withPrefix(prop, prefix)] = newProp;
             continue;
         }
 
 
         const { path, watches, key } = prop;
-        Object.assign(d, getArrDiff(newObj[path], oldObj[path], watches, key, withPrefix(path, prefix)));
+        Object.assign(d, getArrDiff(get(newObj, path), get(oldObj, path), watches, key, withPrefix(path, prefix)));
     }
 
     return d;
@@ -94,7 +94,7 @@ function getArrDiff(newArr: any[], oldArr: any[], props: WatchItem[]|NestedArray
         }
 
         if(Array.isArray(props)){
-            if(key&&item[key]!==oldArr[index][key]) d[`${prefix}[${index}]`] = item;
+            if(key&&get(item, key)!==get(oldArr[index], key)) d[`${prefix}[${index}]`] = item;
             else Object.assign(d, getObjDiff(item, oldArr[index], props, `${prefix}[${index}]`));
         }else{
             Object.assign(d, getArrDiff(item, oldArr[index], props.watches, props.key, `${prefix}[${index}]`));
@@ -105,7 +105,7 @@ function getArrDiff(newArr: any[], oldArr: any[], props: WatchItem[]|NestedArray
 }
 
 export function bindWatch(reactive: Reactive, watches: WatchItem[], callback: (d: {[key: string]: any})=>void){
-    reactive.$watch(()=>getMapedObject(reactive, watches, true), (newV, oldV)=>{
+    reactive.$watch(()=>getMapedObject(reactive, watches), (newV, oldV)=>{
         const diff = getObjDiff(newV, oldV, watches);
         if(Object.keys(diff).length === 0) return;
         callback(diff);
