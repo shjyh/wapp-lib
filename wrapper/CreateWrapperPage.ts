@@ -38,7 +38,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
              'onReady', 'onPullDownRefresh', 'onReachBottom', 'onPageScroll', 'onShareAppMessage'
         ]){
             if(opt[normalEvent]) $opt[normalEvent] = function(this: any, ...arg){
-                opt[normalEvent].call(this.$react, ...arg);
+                return opt[normalEvent].call(this.$react, ...arg);
             }
         }
 
