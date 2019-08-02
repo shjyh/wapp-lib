@@ -6499,7 +6499,7 @@ ctx.draw()
       targetSelector: string,
       /** 监听相交状态变化的回调函数 */
       callback: ObserveCallback,
-    ): void;
+    ): this;
     /** [IntersectionObserver.relativeTo(string selector, Object margins)](IntersectionObserver.relativeTo.md)
      *
      * 使用选择器指定一个节点，作为参照区域之一。 */
@@ -6508,7 +6508,7 @@ ctx.draw()
       selector: string,
       /** 用来扩展（或收缩）参照节点布局区域的边界 */
       margins?: RelativeToMargins,
-    ): void;
+    ): this;
     /** [IntersectionObserver.relativeToViewport(Object margins)](IntersectionObserver.relativeToViewport.md)
 *
 * 指定页面显示区域作为参照区域之一
@@ -6534,7 +6534,7 @@ Page({
     relativeToViewport(
       /** 用来扩展（或收缩）参照节点布局区域的边界 */
       margins?: RelativeToViewportMargins,
-    ): void;
+    ): this;
   }
   interface LivePlayerContext {
     /** [LivePlayerContext.exitFullScreen(Object object)](LivePlayerContext.exitFullScreen.md)

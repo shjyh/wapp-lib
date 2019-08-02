@@ -193,5 +193,14 @@ export function mixins(opt: ComponentOptions, globalMixins: ComponentOptions[] =
         if(fn) opt[lifeCycle] = fn;
     };
 
+    if(!opt.onShareAppMessage){
+        for(let mixin of mixins){
+            if(mixin.onShareAppMessage){
+                opt.onShareAppMessage = mixin.onShareAppMessage
+                break;
+            }
+        }
+    }
+
     return opt;
 }
