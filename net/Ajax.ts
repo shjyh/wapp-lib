@@ -128,6 +128,7 @@ export default function Ajax(API: string){
     const lockSet: {[key: string]: boolean} = {};
 
     function post<T extends { code: number } = { code: number }>(url: string, data: any = {}, opt: AjaxOptions = {}): Promise<T>{
+        if(!data) data = {};
         const errorHandler = mergeErrorHandlers(globalOptions.errorHandler, opt.errorHandler);
         opt = Object.assign({}, globalOptions, opt);
         if(!opt.lockToken) opt.lockToken = url;
