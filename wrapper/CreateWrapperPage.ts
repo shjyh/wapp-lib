@@ -4,7 +4,7 @@ import { ComponentOptions } from '../make';
 import './setter';
 
 export interface WrapperPage {
-    (opt, watchs: WatchItem[], methods: string[]): void;
+    (opt, watchs: WatchItem[], methods: string[], vImages?: {[key: string]: string}): void;
     mixin(m): void
 }
 
