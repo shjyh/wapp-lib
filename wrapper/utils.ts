@@ -185,7 +185,7 @@ export function mixins(opt: ComponentOptions, globalMixins: ComponentOptions[] =
 
     for(let lifeCycle of [
         'onInit', 'beforeLoad', 'onLoad', 'onReady', 'onShow',
-        'onHide', 'onPullDownRefresh', 'onPageScroll', 'onUnload',
+        'onHide', 'onPullDownRefresh', 'onPageScroll', 'onReachBottom', 'onUnload',
         'onDestroy', 'created', 'attached', 'ready', 'moved',
         'detached', 'onPageShow', 'onPageHide'
     ]){
