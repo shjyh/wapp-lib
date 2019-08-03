@@ -97,7 +97,8 @@ export function dateDaySpan(d1: Date, d2: Date): number{
     return (to.valueOf() - from.valueOf()) / (3600 * 1000 * 24);
 }
 
-export function parseDate(str: string): Date{
+export function parseDate(str: string|number): Date{
+    if(typeof str === 'number') return new Date(str);
     const reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.{0,1}\d*))(?:Z|(\+|-)([\d|:]*))?$/;
     const dateReg = /^(\d{4})([\/\-\.])(\d{1,2})\2(\d{1,2})( (\d{1,2}):(\d{1,2})(:(\d{1,2}))?)?$/;
 
