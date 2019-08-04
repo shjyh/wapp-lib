@@ -4,8 +4,14 @@ import set from 'lodash-es/set';
 import { ComponentOptions } from '../make';
 import merge from 'lodash-es/merge';
 import cloneDeep from 'lodash-es/cloneDeep';
-import isEqual from 'lodash-es/isEqual';
+import isEqualWith from 'lodash-es/isEqualWith';
 import { arrayRemove } from '../utils';
+
+function isEqual(value, other): boolean{
+    return isEqualWith(value, other, function(a, b, key){
+        if(key==='$random') return true;
+    })
+}
 
 export interface ArrayWatchItem {
     path: string;
@@ -58,7 +64,7 @@ function withPrefix(path: string, prefix: string){
     return [prefix, '.', path].join('');
 }
 
-function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { [key: string]: any } {
+export function getObjDiff(newObj, oldObj, props: WatchItem[], prefix: string = ''): { [key: string]: any } {
     if(!newObj||!oldObj) return {[prefix]: newObj};
     
     const d = {};
