@@ -90,7 +90,10 @@ function getArrDiff(newArr: any[], oldArr: any[], props: WatchItem[]|NestedArray
     newArr.forEach((item, index)=>{
         if(key==='*this' || !props){
             if(isEqual(item, oldArr[index])) return;
-            else d[`${prefix}[${index}]`] = item;
+            else { 
+                d[`${prefix}[${index}]`] = item;
+                return;
+            }
         }
 
         if(Array.isArray(props)){
