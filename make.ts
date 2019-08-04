@@ -61,7 +61,7 @@ export interface ComponentOptions<
     onHide?(): void;
     onPullDownRefresh?(): void;
     onReachBottom?(): void;
-    onPageScroll?(): void;
+    onPageScroll?(options?: Page.IPageScrollOption): void;
     onUnload?(): void;
     onDestroy?(): void;
 
