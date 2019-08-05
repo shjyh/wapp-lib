@@ -114,11 +114,11 @@ export function wrapper(opt) {
 }
 
 export function mixins<A>(opt1: A): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A>) => Data & Methods & Computed & Readonly<Props> & Component & A
-export function mixins<A, B>(opt1: A): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B>) => Data & Methods & Computed & Readonly<Props> & Component & A & B
-export function mixins<A, B, C>(opt1: A): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B, C>) => Data & Methods & Computed & Readonly<Props> & Component & A & B & C
-export function mixins<A, B, C, D>(opt1: A): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B, C, D>) => Data & Methods & Computed & Readonly<Props> & Component & A & B & C & D
-export function mixins<A, B, C, D, E>(opt1: A): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B, C, D, E>) => Data & Methods & Computed & Readonly<Props> & Component & A & B & C & D & E
-export function mixins<A, B, C, D, E, F>(opt1: A): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B, C, D, E, F>) => Data & Methods & Computed & Readonly<Props> & Component & A & B & C & D & F
+export function mixins<A, B>(opt1: A, opt2: B): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B>) => Data & Methods & Computed & Readonly<Props> & Component & A & B
+export function mixins<A, B, C>(opt1: A, opt2: B, opt3: C): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B, C>) => Data & Methods & Computed & Readonly<Props> & Component & A & B & C
+export function mixins<A, B, C, D>(opt1: A, opt2: B, opt3: C, opt4: D): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B, C, D>) => Data & Methods & Computed & Readonly<Props> & Component & A & B & C & D
+export function mixins<A, B, C, D, E>(opt1: A, opt2: B, opt3: C, opt4: D, opt5: E): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B, C, D, E>) => Data & Methods & Computed & Readonly<Props> & Component & A & B & C & D & E
+export function mixins<A, B, C, D, E, F>(opt1: A, opt2: B, opt3: C, opt4: D, opt5: E, opt6: F): <Data, Methods, Computed, Props>(options?: ThisTypedComponentOptionsWithRecordProps<Data, Methods, Computed, Props, A, B, C, D, E, F>) => Data & Methods & Computed & Readonly<Props> & Component & A & B & C & D & F
 export function mixins(...opts: any[]){
     return function(opt){
         return Object.assign({
