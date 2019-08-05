@@ -101,6 +101,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
                 for(let d of this['__cachedPatches']){
                     this.setData(d);
                 }
+                this['__cachedPatches'] = [];
             }
             if(!this['__waitOnLoadDone']){
                 if(opt.onShow) opt.onShow.call(this.$react, ...args);

@@ -162,6 +162,7 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
                     for(let d of this['__cachedPatches']){
                         this.setData(d);
                     }
+                    this['__cachedPatches'] = [];
                 }
                 if(opt.onPageShow) opt.onPageShow.call(this.$react, ...args);
             },
