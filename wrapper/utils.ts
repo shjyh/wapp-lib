@@ -103,7 +103,7 @@ function getArrDiff(newArr: any[], oldArr: any[], props: WatchItem[]|NestedArray
         }
 
         if(Array.isArray(props)){
-            if(key&&get(item, key)!==get(oldArr[index], key)) d[`${prefix}[${index}]`] = item;
+            if((key&&key!=='random')&&get(item, key)!==get(oldArr[index], key)) d[`${prefix}[${index}]`] = item;
             else Object.assign(d, getObjDiff(item, oldArr[index], props, `${prefix}[${index}]`));
         }else{
             Object.assign(d, getArrDiff(item, oldArr[index], props.watches, props.key, `${prefix}[${index}]`));
