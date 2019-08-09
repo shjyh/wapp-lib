@@ -44,6 +44,7 @@ function invokeHandler(collection: EventCallbackDict, type: string, event: any){
 
 
 export default class EventEmitter<T extends string = string> {
+    private _destroy = false;
     private handlers: EventCallbackDict = {};
     private onceHandlers: EventCallbackDict = {};
     /**@description 缓存的最后一次事件，用于后添加侦听器可以接收最后一次事件*/
@@ -54,10 +55,17 @@ export default class EventEmitter<T extends string = string> {
             invokeEventCallback(handler, this.cachedValue[type]);
         }
     }
-    
+    private destroyWarn(){
+        if(this._destroy){
+            console.warn('this event emitter instance was destroyed!!');
+            return true;
+        }
+        return false;
+    }
     addEventListener(type: T, handler: EventCallback):void
     addEventListener(type: string, handler: EventCallback):void
     addEventListener(type: string, handler: EventCallback){
+        if(this.destroyWarn()) return;
         this.emitCachedEvent(type.toString(), handler);
         insertHandler(this.handlers, type.toString(), handler);
     }
@@ -65,6 +73,7 @@ export default class EventEmitter<T extends string = string> {
     removeEventListener(type: T, handler: EventCallback):void
     removeEventListener(type: string, handler: EventCallback):void
     removeEventListener(type: string, handler: EventCallback){
+        if(this.destroyWarn()) return;
         removeHandler(this.handlers, type, handler);
         removeHandler(this.onceHandlers, type, handler);
     }
@@ -72,6 +81,7 @@ export default class EventEmitter<T extends string = string> {
     once(type: T, handler: EventCallback):void
     once(type: string, handler: EventCallback):void
     once(type: string, handler: EventCallback){
+        if(this.destroyWarn()) return;
         this.emitCachedEvent(type, handler);
         insertHandler(this.onceHandlers, type, handler);
     }
@@ -79,18 +89,21 @@ export default class EventEmitter<T extends string = string> {
     on(type: T, handler: EventCallback):void
     on(type: string, handler: EventCallback):void
     on(type: string, handler: EventCallback){
+        if(this.destroyWarn()) return;
         this.addEventListener(type, handler);
     }
 
     off(type: T, handler: EventCallback):void
     off(type: string, handler: EventCallback):void
     off(type: string, handler: EventCallback){
+        if(this.destroyWarn()) return;
         this.removeEventListener(type, handler);
     }
 
     trigger(type: T, event?: any, cache?: boolean): void
     trigger(type: string, event?: any, cache?: boolean): void
     trigger(type: string, event: any = { type }, cache: boolean = false){
+        if(this.destroyWarn()) return;
         if(cache){
             this.cachedValue[type] = event;
         }
@@ -99,6 +112,7 @@ export default class EventEmitter<T extends string = string> {
     }
 
     destory(){
+        this._destroy = true;
         this.handlers = this.onceHandlers = this.cachedValue = null;
     }
 }
