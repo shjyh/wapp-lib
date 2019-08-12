@@ -213,3 +213,9 @@ export function mixins(opt: ComponentOptions, globalMixins: ComponentOptions[] =
 
     return opt;
 }
+
+export function setData(p: Page.PageInstance|WxComponent, d){
+    delete d[''];
+    if(Object.keys(d).length===0) return;
+    p.setData(d);
+}

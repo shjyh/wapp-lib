@@ -1,5 +1,5 @@
 import Reactive from '../observer/Reactive';
-import { bindWatch, getMapedObject, WatchItem, mixins } from './utils';
+import { bindWatch, getMapedObject, WatchItem, mixins, setData } from './utils';
 import { ComponentOptions } from '../make';
 import './setter';
 
@@ -60,7 +60,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
                 },
                 $setData: {
                     value(d){
-                        page.setData(d);
+                        setData(page, d);
                     }
                 },
                 $getPage: {
@@ -82,14 +82,14 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
 
             bindWatch(reactive, watchs, d=>{
                 if(page['__patchable']){
-                    page.setData(d);
+                    setData(page, d);
                     return;
                 }
                 page['__cachedPatches'].push(d);
             });
 
             //初次设置
-            page.setData(getMapedObject(reactive, watchs));
+            setData(page, getMapedObject(reactive, watchs));
 
             if(opt.onLoad){
                 page['__waitOnLoadDone'] = opt.onLoad.call(reactive, ...args);
@@ -99,7 +99,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
             if(!this['__patchable']){
                 this['__patchable'] = true;
                 for(let d of this['__cachedPatches']){
-                    this.setData(d);
+                    setData(this, d);
                 }
                 this['__cachedPatches'] = [];
             }

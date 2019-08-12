@@ -1,5 +1,5 @@
 import Reactive from '../observer/Reactive';
-import { bindWatch, getMapedObject, WatchItem, mixins } from './utils';
+import { bindWatch, getMapedObject, WatchItem, mixins, setData } from './utils';
 import { ComponentOptions } from '../make';
 import './setter';
 
@@ -111,7 +111,7 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
             Object.defineProperties(reactive, {
                 $setData: {
                     value(d){
-                        component.setData(d);
+                        setData(component, d);
                     }
                 },
                 $getComponent: {
@@ -142,12 +142,12 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
 
             bindWatch(reactive, watchs, d=>{
                 if(this['__patchable']){
-                    this.setData(d);
+                    setData(this, d);
                     return;
                 }
                 this['__cachedPatches'].push(d);
             });
-            this.setData(getMapedObject(this.$react, watchs));
+            setData(this, getMapedObject(this.$react, watchs));
             opt.attached&&opt.attached.call(this.$react, ...args)
         };
         $opt.detached = $opt.lifetimes.detached = function(this: WxComponent, ...args){
@@ -160,7 +160,7 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
                 if(!this['__patchable']){
                     this['__patchable'] = true;
                     for(let d of this['__cachedPatches']){
-                        this.setData(d);
+                        setData(this, d);
                     }
                     this['__cachedPatches'] = [];
                 }
