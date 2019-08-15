@@ -1,7 +1,7 @@
 import EventEmitter from '../EventEmitter';
 import WebSocket from './WebSocket';
 import net from './net';
-import stringify from './stringify';
+import { JSONStringify as stringify } from '../utils';
 
 const eventCollection = ['open','close','error','message'];
 

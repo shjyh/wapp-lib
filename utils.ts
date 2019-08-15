@@ -121,3 +121,17 @@ export function parseDate(str: string|number): Date{
         return Number.parseInt(s, 10);
     }
 }
+
+export function JSONStringify(value: any): string{
+    return JSON.stringify(value, function(key, value){
+        if(key==='$random') return;
+        return value;
+    });
+}
+
+import isEqualWith from 'lodash-es/isEqualWith';
+export function isEqual(value, other): boolean{
+    return isEqualWith(value, other, function(a, b, key){
+        if(key==='$random') return true;
+    })
+}

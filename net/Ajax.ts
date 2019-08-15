@@ -1,7 +1,7 @@
 import {Loading, Toast} from '../ui';
 
 import { HttpErrorHandlers, fireErrorHandler, mergeErrorHandlers } from './ErrorHandler'
-import stringify from './stringify';
+import { JSONStringify as stringify } from '../utils';
 
 interface AajxHookEventMap{
     before: (url: string, data: any, headers: Object) => boolean

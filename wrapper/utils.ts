@@ -4,14 +4,7 @@ import set from 'lodash-es/set';
 import { ComponentOptions } from '../make';
 import merge from 'lodash-es/merge';
 import cloneDeep from 'lodash-es/cloneDeep';
-import isEqualWith from 'lodash-es/isEqualWith';
-import { arrayRemove } from '../utils';
-
-function isEqual(value, other): boolean{
-    return isEqualWith(value, other, function(a, b, key){
-        if(key==='$random') return true;
-    })
-}
+import { arrayRemove, isEqual } from '../utils';
 
 export interface ArrayWatchItem {
     path: string;

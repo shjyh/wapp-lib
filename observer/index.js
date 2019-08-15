@@ -69,7 +69,10 @@ export class Observer {
     for (let i = 0, l = items.length; i < l; i++) {
       observe(items[i]);
       if(isPlainObject(items[i])){
-        items[i].$random = $random++;
+        //若通过clone而来的对象，存在$random，不变
+        if(!items[i].$random){
+          items[i].$random = $random++;
+        }
       }
     }
   }
