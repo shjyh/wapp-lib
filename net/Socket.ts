@@ -201,7 +201,7 @@ export default class Socket extends EventEmitter<EventType>{
                         fireErrorHandler(
                             (errorHandler.logic[(data as any).code])||
                             (errorHandler.logic.default),
-                            toast
+                            toast, data
                         )
                         reject({type:'logic', data});
                     }else resolve(data);
