@@ -1,11 +1,11 @@
 import Reactive from '../observer/Reactive';
 import { bindWatch, getMapedObject, WatchItem, mixins, setData } from './utils';
-import { ComponentOptions } from '../make';
+import { ComponentOptions, Component } from '../make';
 import './setter';
 
 export interface WrapperPage {
     (opt, watchs: WatchItem[], methods: string[], vImages?: {[key: string]: string}): void;
-    mixin(m): void
+    mixin(m: Component): void
 }
 
 const wrapperList: {page: Page.PageConstructor, wrapper: WrapperPage}[] = []
@@ -127,7 +127,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
         Page($opt);
     }
 
-    WrapperPage.mixin = function(m: ComponentOptions){
+    WrapperPage.mixin = function(m: ComponentOptions&Component){
         if(globalMixins.includes(m)) return;
         globalMixins.push(m);
     }

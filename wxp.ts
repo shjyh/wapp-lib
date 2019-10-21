@@ -37,6 +37,7 @@ export interface ApiTypeMap{
     saveImageToPhotosAlbum: ApiMeta<wx.SaveImageToPhotosAlbumOption>;
     previewImage: ApiMeta<wx.PreviewImageOption>;
     setClipboardData: ApiMeta<wx.SetClipboardDataOption>;
+    getClipboardData: ApiMeta<wx.GetClipboardDataOption, wx.GetClipboardDataSuccessCallbackOption>;
     chooseAddress: ApiMeta<wx.ChooseAddressOption, wx.ChooseAddressSuccessCallbackResult>;
     makePhoneCall: ApiMeta<wx.MakePhoneCallOption>;
     requestPayment: ApiMeta<wx.RequestPaymentOption>;
@@ -128,6 +129,7 @@ for(let key of [
     'saveImageToPhotosAlbum',
     'previewImage',
     'setClipboardData',
+    'getClipboardData',
     'chooseAddress',
     'makePhoneCall',
     'requestPayment',
