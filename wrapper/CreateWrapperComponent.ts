@@ -30,17 +30,39 @@ function getDefaultValueByType(type){
 }
 
 function createProp(propName, propValue){
+    let validator = null;
     if([String, Number, Boolean, Object, Array, null].includes(propValue)){
         propValue = { type: propValue, value: getDefaultValueByType(propValue) }
     }else{
-        propValue = {
-            type: propValue.type||null,
-            value: propValue.default?
-                (typeof propValue.default==='function' ? propValue.default() : propValue.default):
-                getDefaultValueByType(propValue.type)
+        let p = propValue;
+        let mainType = null;
+        let optionalTypes = [];
+        if(p.type){
+            // 若指定type
+            if(Array.isArray(p.type)){
+                // type是数组，取第一个做主类型，其它作可选择类型
+                if(p.type.length>0){
+                    mainType = p.type[0];
+                    optionalTypes = p.type.slice(1);
+                }
+            }else if(p.type){
+                // type即是类型
+                mainType = p.type
+            }
         }
+        propValue = {
+            type: mainType,
+            value: p.default?
+                (typeof p.default==='function' ? p.default() : p.default):
+                getDefaultValueByType(mainType)
+        };
+        if(optionalTypes.length) propValue.optionalTypes = optionalTypes;
+        if(p.validator) validator = validator;
     }
     propValue.observer = function(v){
+        if(validator&&validator.call(this.$react, v)===false){
+            console.error('wapp-lib: 属性校验错误', v, this.$react, propValue);
+        }
         this.$react[propName] = v;
     }
     return propValue;
