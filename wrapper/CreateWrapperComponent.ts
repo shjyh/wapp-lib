@@ -57,7 +57,7 @@ function createProp(propName, propValue){
                 getDefaultValueByType(mainType)
         };
         if(optionalTypes.length) propValue.optionalTypes = optionalTypes;
-        if(p.validator) validator = validator;
+        if(p.validator) validator = p.validator;
     }
     propValue.observer = function(v){
         if(validator&&validator.call(this.$react, v)===false){
