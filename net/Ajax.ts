@@ -31,7 +31,7 @@ export function Curl(API: string){
         method = 'POST', headers = {}, data, timeout = 0
     }: {
         method?:'POST'|'GET', headers?: {[key:string]: string}, data?: any, timeout?:number
-    } = {}): Promise<wx.RequestSuccessCallbackResult>{
+    } = {}): Promise<WechatMiniprogram.RequestSuccessCallbackResult>{
         if(API&&!url.startsWith('http')){
             url = API + url;
         }

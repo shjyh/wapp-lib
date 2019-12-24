@@ -1,6 +1,6 @@
 import Reactive from '../observer/Reactive';
 import { bindWatch, getMapedObject, WatchItem, mixins, setData } from './utils';
-import { ComponentOptions, Component } from '../make';
+import { ComponentOptions, Component, ComponentInstance } from '../make';
 import './setter';
 
 export interface WrapperComponent {
@@ -8,7 +8,7 @@ export interface WrapperComponent {
     mixin(m: Component): void
 }
 
-const wrapperList: {component: Function, wrapper: WrapperComponent}[] = []
+const wrapperList: {component: WechatMiniprogram.Component.Constructor, wrapper: WrapperComponent}[] = []
 
 function getDefaultValueByType(type){
     switch(type){
@@ -68,7 +68,7 @@ function createProp(propName, propValue){
     return propValue;
 }
 
-export default function CreateWrapperComponent(Component: Function): WrapperComponent{
+export default function CreateWrapperComponent(Component: WechatMiniprogram.Component.Constructor): WrapperComponent{
     for(let w of wrapperList){
         if(w.component===Component) return w.wrapper;
     }
@@ -79,14 +79,32 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
         const propsMixin = {
             data: {}
         };
-        const $opt = {
+        const $opt: { 
+            data?: Record<string, any>, 
+            properties?: Record<string, any>,
+            methods: Record<string, (...args: any[])=>any>,
+            relations: any,
+            externalClasses: any,
+            options: any,
+            lifetimes?: {
+                created?(this: ComponentInstance, ...args): any,
+                attached?(this: ComponentInstance, ...args): any,
+                ready?(this: ComponentInstance, ...args): any,
+                moved?(this: ComponentInstance, ...args): any,
+                detached?(this: ComponentInstance, ...args): any,
+                error?(this: ComponentInstance, ...args): any
+            },
+            pageLifetimes?: {
+                show?(this: ComponentInstance, ...args): any,
+                hide?(this: ComponentInstance, ...args): any,
+                resize?(this: ComponentInstance, ...args): any
+            }
+        } = {
             methods: {},
             relations: opt.relations,
             externalClasses: opt.externalClasses,
-            options: opt.options,
-            lifetimes: {},
-            pageLifetimes: {}
-        } as any;
+            options: opt.options
+        }
 
         if(vImages){
             watchs = watchs.filter(w=>w!=='$images');
@@ -122,63 +140,66 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
             }
         }
 
-        $opt.created = $opt.lifetimes.created = function(this: WxComponent, ...args){
-            const component = this;
-            component['__patchable'] = true;
-            component['__cachedPatches'] = [];
-
-            const reactive = new Reactive(opt, false);
-            if(vImages) reactive['$images'] = vImages;
-
-            Object.defineProperties(reactive, {
-                $setData: {
-                    value(d){
-                        setData(component, d);
+        $opt.lifetimes = {
+            created(this: ComponentInstance, ...args){
+                const component = this;
+                component['__patchable'] = true;
+                component['__cachedPatches'] = [];
+    
+                const reactive = new Reactive(opt, false);
+                if(vImages) reactive['$images'] = vImages;
+    
+                Object.defineProperties(reactive, {
+                    $setData: {
+                        value(d){
+                            setData(component, d);
+                        }
+                    },
+                    $getComponent: {
+                        value(){ return component; }
+                    },
+                    $emit: {
+                        value(event: string, detail: Object, options: WechatMiniprogram.Component.TriggerEventOption){
+                            component.triggerEvent(event, detail, options);
+                        }
+                    },
+                    triggerEvent: {
+                        value(event: string, detail: Object, options: WechatMiniprogram.Component.TriggerEventOption){
+                            component.triggerEvent(event, detail, options);
+                        }
                     }
-                },
-                $getComponent: {
-                    value(){ return component; }
-                },
-                $emit: {
-                    value(event: string, detail: Object, options: TriggerEventOption){
-                        component.triggerEvent(event, detail, options);
+                });
+                if(opt.onInit) opt.onInit.call(reactive);
+                component.$react = reactive;
+                /**
+                 * 在onInit之后调用initWatch开始侦听
+                 */
+                if(opt.created) opt.created.call(reactive, ...args);
+            },
+            attached(this: ComponentInstance, ...args){
+                //初次设置
+                const reactive = this.$react as Reactive;
+                reactive.$initWatch();
+    
+                bindWatch(reactive, watchs, d=>{
+                    if(this['__patchable']){
+                        setData(this, d);
+                        return;
                     }
-                },
-                triggerEvent: {
-                    value(event: string, detail: Object, options: TriggerEventOption){
-                        component.triggerEvent(event, detail, options);
-                    }
-                }
-            });
-            if(opt.onInit) opt.onInit.call(reactive);
-            component.$react = reactive;
-            /**
-             * 在onInit之后调用initWatch开始侦听
-             */
-            if(opt.created) opt.created.call(reactive, ...args);
+                    this['__cachedPatches'].push(d);
+                });
+                setData(this, getMapedObject(this.$react, watchs));
+                opt.attached&&opt.attached.call(this.$react, ...args)
+            },
+            detached(this: ComponentInstance, ...args){
+                if(opt.detached) opt.detached.call(this.$react, ...args);
+                this['$react'].$unwatch();
+                this['__patchable'] = false;
+            }
         };
-        $opt.attached = $opt.lifetimes.attached = function(this: WxComponent, ...args){
-            //初次设置
-            const reactive = this.$react as Reactive;
-            reactive.$initWatch();
 
-            bindWatch(reactive, watchs, d=>{
-                if(this['__patchable']){
-                    setData(this, d);
-                    return;
-                }
-                this['__cachedPatches'].push(d);
-            });
-            setData(this, getMapedObject(this.$react, watchs));
-            opt.attached&&opt.attached.call(this.$react, ...args)
-        };
-        $opt.detached = $opt.lifetimes.detached = function(this: WxComponent, ...args){
-            if(opt.detached) opt.detached.call(this.$react, ...args);
-            this['$react'].$unwatch();
-            this['__patchable'] = false;
-        };
         $opt.pageLifetimes = {
-            show(this: WxComponent, ...args){
+            show(this: ComponentInstance, ...args){
                 if(!this['__patchable']){
                     this['__patchable'] = true;
                     for(let d of this['__cachedPatches']){
@@ -188,7 +209,7 @@ export default function CreateWrapperComponent(Component: Function): WrapperComp
                 }
                 if(opt.onPageShow) opt.onPageShow.call(this.$react, ...args);
             },
-            hide(this: WxComponent, ...args){
+            hide(this: ComponentInstance, ...args){
                 this['__patchable'] = false;
                 if(opt.onPageHide) opt.onPageHide.call(this.$react, ...args);
             }

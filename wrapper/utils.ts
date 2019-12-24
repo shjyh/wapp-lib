@@ -1,7 +1,7 @@
 import Reactive from "../observer/Reactive";
 import get from 'lodash-es/get';
 import set from 'lodash-es/set';
-import { ComponentOptions } from '../make';
+import { ComponentOptions, PageInstance, ComponentInstance } from '../make';
 import merge from 'lodash-es/merge';
 import cloneDeep from 'lodash-es/cloneDeep';
 import { arrayRemove, isEqual } from '../utils';
@@ -207,7 +207,7 @@ export function mixins(opt: ComponentOptions, globalMixins: ComponentOptions[] =
     return opt;
 }
 
-export function setData(p: Page.PageInstance|WxComponent, d){
+export function setData(p: PageInstance|ComponentInstance, d){
     delete d[''];
     if(Object.keys(d).length===0) return;
     p.setData(d);

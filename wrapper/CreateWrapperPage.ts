@@ -1,6 +1,6 @@
 import Reactive from '../observer/Reactive';
 import { bindWatch, getMapedObject, WatchItem, mixins, setData } from './utils';
-import { ComponentOptions, Component } from '../make';
+import { ComponentOptions, Component, PageInstance } from '../make';
 import './setter';
 
 export interface WrapperPage {
@@ -8,9 +8,9 @@ export interface WrapperPage {
     mixin(m: Component): void
 }
 
-const wrapperList: {page: Page.PageConstructor, wrapper: WrapperPage}[] = []
+const wrapperList: {page: WechatMiniprogram.Page.Constructor, wrapper: WrapperPage}[] = []
 
-export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPage{
+export default function CreateWrapperPage(Page: WechatMiniprogram.Page.Constructor): WrapperPage{
     for(let w of wrapperList){
         if(w.page===Page) return w.wrapper;
     }
@@ -43,7 +43,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
         }
 
 
-        $opt.onLoad = function(this: Page.PageInstance, ...args){
+        $opt.onLoad = function(this: PageInstance, ...args){
             const page = this;
             page['__patchable'] = true;
             page['__cachedPatches'] = [];
@@ -95,7 +95,7 @@ export default function CreateWrapperPage(Page: Page.PageConstructor): WrapperPa
                 page['__waitOnLoadDone'] = opt.onLoad.call(reactive, ...args);
             }
         };
-        $opt.onShow = function(this:Page.PageInstance, ...args){
+        $opt.onShow = function(this:PageInstance, ...args){
             if(!this['__patchable']){
                 this['__patchable'] = true;
                 for(let d of this['__cachedPatches']){

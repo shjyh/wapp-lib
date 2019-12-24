@@ -51,8 +51,8 @@ export interface ComponentOptions<
     relations?: Object;
 
     onShareAppMessage?(
-        options?: Page.IShareAppMessageOption,
-    ): Page.ICustomShareContent;
+        options?: WechatMiniprogram.Page.IShareAppMessageOption,
+    ): WechatMiniprogram.Page.ICustomShareContent;
     onInit?(): void;
     beforeLoad?(options: any): void;
     onLoad?(options: any): void
@@ -61,7 +61,7 @@ export interface ComponentOptions<
     onHide?(): void;
     onPullDownRefresh?(): void;
     onReachBottom?(): void;
-    onPageScroll?(options?: Page.IPageScrollOption): void;
+    onPageScroll?(options?: WechatMiniprogram.Page.IPageScrollOption): void;
     onUnload?(): void;
     onDestroy?(): void;
 
@@ -77,14 +77,21 @@ export interface ComponentOptions<
     excludes?: ComponentOptions[];
 }
 
+export type PageInstance = WechatMiniprogram.Page.Instance<Record<string, any>, Record<string, any>>;
+export type ComponentInstance = WechatMiniprogram.Component.Instance<
+    Record<string, any>,
+    Record<string, WechatMiniprogram.Component.AllProperty>,
+    Partial<Record<string, (...args: any[]) => any>>
+> & Record<string, any>
+
 export interface Component {
     readonly $options: ComponentOptions;
     readonly $route: string;
 
     $setData(d): void;
     $isActive(): boolean;
-    $getPage(): Page.PageInstance;
-    $getComponent(): WxComponent;
+    $getPage(): PageInstance;
+    $getComponent(): ComponentInstance;
     $images?: {[key: string]: string};
 
     $watch(
@@ -97,8 +104,8 @@ export interface Component {
         callback: (this: this, n: T, o: T) => void,
         options?: WatchOptions
     ): (() => void);
-    $emit(event: string, detail?: Object, options?: TriggerEventOption): void;
-    triggerEvent(event: string, detail?: Object, options?: TriggerEventOption): void;
+    $emit(event: string, detail?: Object, options?: WechatMiniprogram.Component.TriggerEventOption): void;
+    triggerEvent(event: string, detail?: Object, options?: WechatMiniprogram.Component.TriggerEventOption): void;
 }
 
 type DataDef<Data, Props> = Data | ((this: Readonly<Props> & Component) => Data)

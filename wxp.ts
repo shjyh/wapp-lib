@@ -1,7 +1,6 @@
 
-type ApiName = keyof wx.Wx;
 
-interface ApiMeta<Opt, Result = wx.GeneralCallbackResult, Err = wx.GeneralCallbackResult, Complete = wx.GeneralCallbackResult> {
+interface ApiMeta<Opt, Result = WechatMiniprogram.GeneralCallbackResult, Err = WechatMiniprogram.GeneralCallbackResult, Complete = WechatMiniprogram.GeneralCallbackResult> {
     opt: Opt;
     result: Result;
     err: Err,
@@ -9,39 +8,39 @@ interface ApiMeta<Opt, Result = wx.GeneralCallbackResult, Err = wx.GeneralCallba
 }
 
 export interface ApiTypeMap{
-    checkSession: ApiMeta<wx.CheckSessionOption>;
-    login: ApiMeta<wx.LoginOption, wx.LoginSuccessCallbackResult>;
-    getUserInfo: ApiMeta<wx.GetUserInfoOption, wx.GetUserInfoSuccessCallbackResult>;
-    redirectTo: ApiMeta<wx.RedirectToOption>;
-    switchTab: ApiMeta<wx.SwitchTabOption>;
-    reLaunch: ApiMeta<wx.ReLaunchOption>;
-    navigateTo: ApiMeta<wx.NavigateToOption>;
-    navigateBack: ApiMeta<wx.NavigateBackOption>;
-    chooseImage: ApiMeta<wx.ChooseImageOption, wx.ChooseImageSuccessCallbackResult>;
-    authorize: ApiMeta<wx.AuthorizeOption>;
-    getSetting: ApiMeta<wx.GetSettingOption, wx.GetSettingSuccessCallbackResult>;
-    openSetting: ApiMeta<wx.OpenSettingOption, wx.OpenSettingSuccessCallbackResult>;
-    uploadFile: ApiMeta<wx.UploadFileOption, wx.UploadFileSuccessCallbackResult>;
-    getStorage: ApiMeta<wx.GetStorageOption, wx.GetStorageSuccessCallbackResult>;
-    setStorage: ApiMeta<wx.SetStorageOption>;
-    clearStorage: ApiMeta<wx.ClearStorageOption>;
-    showActionSheet: ApiMeta<wx.ShowActionSheetOption, wx.ShowActionSheetSuccessCallbackResult>;
-    getSystemInfo: ApiMeta<wx.GetSystemInfoOption, wx.GetSystemInfoSuccessCallbackResult>;
-    getBackgroundAudioPlayerState: ApiMeta<wx.GetBackgroundAudioPlayerStateOption, wx.GetBackgroundAudioPlayerStateSuccessCallbackResult>;
-    startRecord: ApiMeta<wx.WxStartRecordOption, wx.StartRecordSuccessCallbackResult>;
-    downloadFile: ApiMeta<wx.DownloadFileOption, wx.DownloadFileSuccessCallbackResult>;
-    playVoice: ApiMeta<wx.PlayVoiceOption>;
-    getLocation: ApiMeta<wx.GetLocationOption, wx.GetLocationSuccessCallbackResult>;
-    showModal: ApiMeta<wx.ShowModalOption, wx.ShowModalSuccessCallbackResult>;
-    getImageInfo: ApiMeta<wx.GetImageInfoOption, wx.GetImageInfoSuccessCallbackResult>;
-    saveImageToPhotosAlbum: ApiMeta<wx.SaveImageToPhotosAlbumOption>;
-    previewImage: ApiMeta<wx.PreviewImageOption>;
-    setClipboardData: ApiMeta<wx.SetClipboardDataOption>;
-    getClipboardData: ApiMeta<wx.GetClipboardDataOption, wx.GetClipboardDataSuccessCallbackOption>;
-    chooseAddress: ApiMeta<wx.ChooseAddressOption, wx.ChooseAddressSuccessCallbackResult>;
-    makePhoneCall: ApiMeta<wx.MakePhoneCallOption>;
-    requestPayment: ApiMeta<wx.RequestPaymentOption>;
-    scanCode: ApiMeta<wx.ScanCodeOption, wx.ScanCodeSuccessCallbackResult>;
+    checkSession: ApiMeta<WechatMiniprogram.CheckSessionOption>;
+    login: ApiMeta<WechatMiniprogram.LoginOption, WechatMiniprogram.LoginSuccessCallbackResult>;
+    getUserInfo: ApiMeta<WechatMiniprogram.GetUserInfoOption, WechatMiniprogram.GetUserInfoSuccessCallbackResult>;
+    redirectTo: ApiMeta<WechatMiniprogram.RedirectToOption>;
+    switchTab: ApiMeta<WechatMiniprogram.SwitchTabOption>;
+    reLaunch: ApiMeta<WechatMiniprogram.ReLaunchOption>;
+    navigateTo: ApiMeta<WechatMiniprogram.NavigateToOption>;
+    navigateBack: ApiMeta<WechatMiniprogram.NavigateBackOption>;
+    chooseImage: ApiMeta<WechatMiniprogram.ChooseImageOption, WechatMiniprogram.ChooseImageSuccessCallbackResult>;
+    authorize: ApiMeta<WechatMiniprogram.AuthorizeOption>;
+    getSetting: ApiMeta<WechatMiniprogram.GetSettingOption, WechatMiniprogram.GetSettingSuccessCallbackResult>;
+    openSetting: ApiMeta<WechatMiniprogram.OpenSettingOption, WechatMiniprogram.OpenSettingSuccessCallbackResult>;
+    uploadFile: ApiMeta<WechatMiniprogram.UploadFileOption, WechatMiniprogram.UploadFileSuccessCallbackResult>;
+    getStorage: ApiMeta<WechatMiniprogram.GetStorageOption, WechatMiniprogram.GetStorageSuccessCallbackResult>;
+    setStorage: ApiMeta<WechatMiniprogram.SetStorageOption>;
+    clearStorage: ApiMeta<WechatMiniprogram.ClearStorageOption>;
+    showActionSheet: ApiMeta<WechatMiniprogram.ShowActionSheetOption, WechatMiniprogram.ShowActionSheetSuccessCallbackResult>;
+    getSystemInfo: ApiMeta<WechatMiniprogram.GetSystemInfoOption, WechatMiniprogram.GetSystemInfoSuccessCallbackResult>;
+    getBackgroundAudioPlayerState: ApiMeta<WechatMiniprogram.GetBackgroundAudioPlayerStateOption, WechatMiniprogram.GetBackgroundAudioPlayerStateSuccessCallbackResult>;
+    startRecord: ApiMeta<WechatMiniprogram.WxStartRecordOption, WechatMiniprogram.StartRecordSuccessCallbackResult>;
+    downloadFile: ApiMeta<WechatMiniprogram.DownloadFileOption, WechatMiniprogram.DownloadFileSuccessCallbackResult>;
+    playVoice: ApiMeta<WechatMiniprogram.PlayVoiceOption>;
+    getLocation: ApiMeta<WechatMiniprogram.GetLocationOption, WechatMiniprogram.GetLocationSuccessCallbackResult>;
+    showModal: ApiMeta<WechatMiniprogram.ShowModalOption, WechatMiniprogram.ShowModalSuccessCallbackResult>;
+    getImageInfo: ApiMeta<WechatMiniprogram.GetImageInfoOption, WechatMiniprogram.GetImageInfoSuccessCallbackResult>;
+    saveImageToPhotosAlbum: ApiMeta<WechatMiniprogram.SaveImageToPhotosAlbumOption>;
+    previewImage: ApiMeta<WechatMiniprogram.PreviewImageOption>;
+    setClipboardData: ApiMeta<WechatMiniprogram.SetClipboardDataOption>;
+    getClipboardData: ApiMeta<WechatMiniprogram.GetClipboardDataOption, WechatMiniprogram.GetClipboardDataSuccessCallbackOption>;
+    chooseAddress: ApiMeta<WechatMiniprogram.ChooseAddressOption, WechatMiniprogram.ChooseAddressSuccessCallbackResult>;
+    makePhoneCall: ApiMeta<WechatMiniprogram.MakePhoneCallOption>;
+    requestPayment: ApiMeta<WechatMiniprogram.RequestPaymentOption>;
+    scanCode: ApiMeta<WechatMiniprogram.ScanCodeOption, WechatMiniprogram.ScanCodeSuccessCallbackResult>;
 }
 type WrapperApiName = keyof ApiTypeMap;
 type PromisifyApi<T extends WrapperApiName> = (opt?: ApiTypeMap[T]['opt']) => Promise<ApiTypeMap[T]['result']>;
