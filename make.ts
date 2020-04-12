@@ -46,7 +46,9 @@ export interface ComponentOptions<
 
     externalClasses?: string|string[];
     options?: {
-        multipleSlots?: boolean
+        multipleSlots?: boolean;
+        styleIsolation?: 'isolated'|'apply-shared'|'shared'|'page-isolated'|'page-apply-shared'|'page-shared';
+        addGlobalClass?: boolean;
     };
     relations?: Object;
 

@@ -3,14 +3,14 @@ import {Loading, Toast} from '../ui';
 import { HttpErrorHandlers, fireErrorHandler, mergeErrorHandlers } from './ErrorHandler'
 import { JSONStringify as stringify } from '../utils';
 
-interface AajxHookEventMap{
+interface AjaxHookEventMap{
     before: (url: string, data: any, headers: Object) => boolean
     success: (url: string, req: any) => void
     error: (url: string, err: Object) => void
     complete: (url: string) => void
 }
 
-export type AjaxHookType = keyof AajxHookEventMap
+export type AjaxHookType = keyof AjaxHookEventMap
 
 export interface AjaxConfig {
     loading?: Loading|false
@@ -81,7 +81,7 @@ export default function Ajax(API: string){
         }
     }
 
-    const hooks: {[key in AjaxHookType]: AajxHookEventMap[key][]} = {
+    const hooks: {[key in AjaxHookType]: AjaxHookEventMap[key][]} = {
         before: [],
         complete: [],
         success: [],
@@ -101,7 +101,7 @@ export default function Ajax(API: string){
         );
     }
 
-    function addHook<K extends AjaxHookType>(type: K, hook: AajxHookEventMap[K]|AajxHookEventMap[K][]): void
+    function addHook<K extends AjaxHookType>(type: K, hook: AjaxHookEventMap[K]|AjaxHookEventMap[K][]): void
     function addHook(type: AjaxHookType, hook){
         if(Array.isArray(hook)){
             hooks[type].push(...hook);
@@ -112,7 +112,7 @@ export default function Ajax(API: string){
 
     function use(obj: {
         config?:AjaxConfig, 
-        hooks?: {[key in AjaxHookType]?: AajxHookEventMap[key]|AajxHookEventMap[key][]}
+        hooks?: {[key in AjaxHookType]?: AjaxHookEventMap[key]|AjaxHookEventMap[key][]}
     }){
         if(obj.config) config(obj.config);
         if(obj.hooks){
